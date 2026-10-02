@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Badminton Racket Finder</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #202820;
+      background: #f4f6f2;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 32px 18px 56px;
+    }
+
+    main {
+      width: min(100%, 850px);
+      margin: 0 auto;
+    }
+
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 5vw, 2.5rem); }
+    header p, .muted { color: #59645b; }
+    header p { margin: 0; }
+
+    form, .results-panel {
+      padding: 24px;
+      background: #fff;
+      border: 1px solid #dce3dc;
+      border-radius: 8px;
+    }
+
+    fieldset {
+      min-width: 0;
+      margin: 0;
+      padding: 0 0 20px;
+      border: 0;
+    }
+
+    legend, label > span:first-child {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 650;
+    }
+
+    .questionnaire {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 20px;
+    }
+
+    .question { min-width: 0; }
+    .options { display: grid; gap: 7px; }
+    .options label { display: flex; align-items: center; gap: 8px; }
+    input[type="radio"] { accent-color: #23734a; }
+
+    select {
+      width: 100%;
+      min-height: 42px;
+      padding: 8px 10px;
+      color: inherit;
+      background: #fff;
+      border: 1px solid #aeb9af;
+      border-radius: 5px;
+      font: inherit;
+    }
+
+    button, .buy-link {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 16px;
+      border: 0;
+      border-radius: 5px;
+      background: #1f6b43;
+      color: #fff;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    button:hover, .buy-link:hover { background: #174f32; }
+    button.secondary { background: #e7eee8; color: #20372a; }
+    button.secondary:hover { background: #d8e5da; }
+    .form-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .message { min-height: 1.4em; margin: 14px 0 0; color: #a12c27; }
+    .results-panel { margin-top: 22px; }
+    .results-panel h2 { margin: 0 0 6px; }
+    .results-intro { margin: 0 0 16px; }
+    .result-list { display: grid; gap: 12px; }
+
+    .result {
+      padding: 16px;
+      border: 1px solid #dce3dc;
+      border-left: 4px solid #328354;
+      border-radius: 5px;
+    }
+
+    .result-heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+    .result h3 { margin: 0; font-size: 1.1rem; }
+    .score { color: #1f6b43; font-weight: 750; }
+    .specs { margin: 10px 0; color: #39463c; }
+    .reasons { margin: 8px 0 14px; padding-left: 20px; }
+    .notice { margin: 16px 0 0; font-size: .92rem; color: #59645b; }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 620px) {
+      body { padding: 22px 12px 36px; }
+      form, .results-panel { padding: 18px; }
+      .questionnaire { grid-template-columns: 1fr; }
+      fieldset { padding-bottom: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Badminton Racket Finder</h1>
+      <p>Answer a few questions to find rackets that fit the way you play.</p>
+    </header>
+
+    <form id="racket-form">
+      <div class="questionnaire">
+        <fieldset class="question">
+          <legend>1. Gender</legend>
+          <div class="options">
+            <label><input type="radio" name="gender" value="Male" required> Male</label>
+            <label><input type="radio" name="gender" value="Female"> Female</label>
+            <label><input type="radio" name="gender" value="Prefer not to say"> Prefer not to say</label>
+          </div>
+        </fieldset>
+
+        <label class="question"><span>2. Skill Level</span>
+          <select name="skill" required>
+            <option value="">Choose one</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+          </select>
+        </label>
+        <label class="question"><span>3. Playing Type</span>
+          <select name="playingType" required>
+            <option value="">Choose one</option><option>Singles</option><option>Doubles</option><option>Both</option>
+          </select>
+        </label>
+        <label class="question"><span>4. Playing Style</span>
+          <select name="style" required>
+            <option value="">Choose one</option><option>Speed / defensive</option><option>Balanced</option><option>Power / attacking</option>
+          </select>
+        </label>
+        <label class="question"><span>5. Approximate Playing Experience</span>
+          <select name="experience" required>
+            <option value="">Choose one</option><option>Less than 1 year</option><option>1–3 years</option><option>3–5 years</option><option>5+ years</option>
+          </select>
+        </label>
+        <label class="question"><span>6. Swing Speed</span>
+          <select name="swingSpeed" required>
+            <option value="">Choose one</option><option>Slow</option><option>Medium</option><option>Fast</option>
+          </select>
+        </label>
+        <label class="question"><span>7. Preferred Racket Weight</span>
+          <select name="weight" required>
+            <option value="">Choose one</option><option>Lightweight</option><option>Medium</option><option>Heavy</option><option>No preference</option>
+          </select>
+        </label>
+        <label class="question"><span>8. Preferred Balance</span>
+          <select name="balance" required>
+            <option value="">Choose one</option><option>Head-light</option><option>Even balance</option><option>Head-heavy</option><option>No preference</option>
+          </select>
+        </label>
+        <label class="question"><span>9. Racket Flexibility</span>
+          <select name="flexibility" required>
+            <option value="">Choose one</option><option>Flexible</option><option>Medium</option><option>Stiff</option><option>No preference</option>
+          </select>
+        </label>
+        <label class="question"><span>10. Budget</span>
+          <select name="budget" required>
+            <option value="">Choose one</option><option>Under $75</option><option>$75–$125</option><option>$125–$175</option><option>$175+</option>
+          </select>
+        </label>
+        <label class="question"><span>11. What is most important to you?</span>
+          <select name="priority" required>
+            <option value="">Choose one</option><option>Speed and maneuverability</option><option>Power</option><option>Control</option><option>Balanced performance</option>
+          </select>
+        </label>
+        <label class="question"><span>12. Any brand preference?</span>
+          <select name="brand" required>
+            <option value="">Choose one</option><option>No preference</option><option>Yonex</option><option>Victor</option><option>Li-Ning</option><option>Other</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-actions">
+        <button type="submit">Find My Racket</button>
+        <button class="secondary" type="reset">Start Over</button>
+      </div>
+      <p id="form-message" class="message" role="alert" aria-live="polite"></p>
+    </form>
+
+    <section id="results" class="results-panel" aria-live="polite" hidden>
+      <h2>Your top racket matches</h2>
+      <p class="results-intro">Ranked by compatibility with your answers.</p>
+      <div id="result-list" class="result-list"></div>
+      <p class="notice">Purchase links are example placeholders, not verified retailer pages. Gender is not used to rank rackets.</p>
+    </section>
+  </main>
+
+  <script>
+    // Racket catalog: add or remove racket records here; scoring logic is below.
+    // All purchaseUrl values are example placeholders and should be replaced with verified retailer links.
+    const rackets = [
+      { name: "Astrox 88D Pro", brand: "Yonex", price: 250, weight: "4U (80-84 g)", weightClass: "Lightweight", balance: "Head-heavy", flexibility: "Stiff", skills: ["Intermediate", "Advanced"], playingTypes: ["Doubles"], styles: ["Power / attacking"], swingSpeeds: ["Medium", "Fast"], experience: ["3–5 years", "5+ years"], power: 9, speed: 7, control: 8, purchaseUrl: "https://example.com/replace-with-verified-astrox-88d-pro-link" },
+      { name: "Astrox 100 ZZ", brand: "Yonex", price: 270, weight: "4U (80-84 g)", weightClass: "Lightweight", balance: "Head-heavy", flexibility: "Stiff", skills: ["Advanced"], playingTypes: ["Singles", "Doubles"], styles: ["Power / attacking"], swingSpeeds: ["Fast"], experience: ["5+ years"], power: 10, speed: 7, control: 8, purchaseUrl: "https://example.com/replace-with-verified-astrox-100-zz-link" },
+      { name: "Astrox 77 Pro", brand: "Yonex", price: 220, weight: "4U (80-84 g)", weightClass: "Lightweight", balance: "Head-heavy", flexibility: "Medium", skills: ["Intermediate", "Advanced"], playingTypes: ["Singles", "Doubles"], styles: ["Balanced", "Power / attacking"], swingSpeeds: ["Medium", "Fast"], experience: ["1–3 years", "3–5 years", "5+ years"], power: 8, speed: 7, control: 8, purchaseUrl: "https://example.com/replace-with-verified-astrox-77-pro-link" },
+      { name: "Nanoflare 800 Pro", brand: "Yonex", price: 250, weight: "4U (80-84 g)", weightClass: "Lightweight", balance: "Head-light", flexibility: "Stiff", skills: ["Intermediate", "Advanced"], playingTypes: ["Doubles"], styles: ["Speed / defensive"], swingSpeeds: ["Medium", "Fast"], experience: ["3–5 years", "5+ years"], power: 7, speed: 10, control: 8, purchaseUrl: "https://example.com/replace-with-verified-nanoflare-800-pro-link" },
+      { name: "Nanoflare 700 Pro", brand: "Yonex", price: 200, weight: "4U (80-84 g)", weightClass: "Lightweight", balance: "Head-light", flexibility: "Medium", skills: ["Beginner", "Intermediate", "Advanced"], playingTypes: ["Singles", "Doubles"], styles: ["Speed / defensive", "Balanced"], swingSpeeds: ["Slow", "Medium", "Fast"], experience: ["Less than 1 year", "1–3 years", "3–5 years"], power: 7, speed: 9, control: 8, purchaseUrl: "https://example.com/replace-with-verified-nanoflare-700-pro-link" },
+      { name: "Arcsaber 11 Pro", brand: "Yonex", price: 250, weight: "3U (85-89 g)", weightClass: "Medium", balance: "Even balance", flexibility: "Stiff", skills: ["Intermediate", "Advanced"], playingTypes: ["Singles", "Doubles"], styles: ["Balanced"], swingSpeeds: ["Medium", "Fast"], experience: ["3–5 years", "5+ years"], power: 8, speed: 8, control: 9, purchaseUrl: "https://example.com/replace-with-verified-arcsaber-11-pro-link" },
+      { name: "Thruster K 220H II", brand: "Victor", price: 130, weight: "4U (80-84 g)", weightClass: "Lightweight", balance: "Head-heavy", flexibility: "Medium", skills: ["Beginner", "Intermediate"], playingTypes: ["Singles", "Doubles"], styles: ["Power / attacking", "Balanced"], swingSpeeds: ["Slow", "Medium"], experience: ["Less than 1 year", "1–3 years", "3–5 years"], power: 8, speed: 7, control: 7, purchaseUrl: "https://example.com/replace-with-verified-thruster-k-220h-ii-link" },
+      { name: "Auraspeed 90K II", brand: "Victor", price: 250, weight: "4U (80-84 g)", weightClass: "Lightweight", balance: "Even balance", flexibility: "Stiff", skills: ["Intermediate", "Advanced"], playingTypes: ["Singles", "Doubles"], styles: ["Speed / defensive", "Balanced"], swingSpeeds: ["Medium", "Fast"], experience: ["3–5 years", "5+ years"], power: 8, speed: 9, control: 8, purchaseUrl: "https://example.com/replace-with-verified-auraspeed-90k-ii-link" },
+      { name: "Axforce 80", brand: "Li-Ning", price: 230, weight: "4U (80-84 g)", weightClass: "Lightweight", balance: "Head-heavy", flexibility: "Stiff", skills: ["Intermediate", "Advanced"], playingTypes: ["Singles", "Doubles"], styles: ["Power / attacking"], swingSpeeds: ["Medium", "Fast"], experience: ["3–5 years", "5+ years"], power: 9, speed: 7, control: 8, purchaseUrl: "https://example.com/replace-with-verified-axforce-80-link" },
+      { name: "Windstorm 72", brand: "Li-Ning", price: 100, weight: "6U (70-74 g)", weightClass: "Lightweight", balance: "Head-light", flexibility: "Flexible", skills: ["Beginner", "Intermediate"], playingTypes: ["Singles", "Doubles"], styles: ["Speed / defensive"], swingSpeeds: ["Slow", "Medium"], experience: ["Less than 1 year", "1–3 years"], power: 6, speed: 9, control: 7, purchaseUrl: "https://example.com/replace-with-verified-windstorm-72-link" },
+      { name: "Power Cushion 50", brand: "Yonex", price: 65, weight: "3U (85-89 g)", weightClass: "Medium", balance: "Even balance", flexibility: "Flexible", skills: ["Beginner"], playingTypes: ["Singles", "Doubles"], styles: ["Balanced"], swingSpeeds: ["Slow", "Medium"], experience: ["Less than 1 year", "1–3 years"], power: 6, speed: 6, control: 7, purchaseUrl: "https://example.com/replace-with-verified-power-cushion-50-link" }
+    ];
+
+    const weights = {
+      style: 18,
+      skill: 13,
+      weight: 10,
+      balance: 14,
+      flexibility: 10,
+      playingType: 9,
+      swingSpeed: 9,
+      budget: 5,
+      priority: 5,
+      brand: 4,
+      experience: 3
+    };
+
+    const form = document.getElementById("racket-form");
+    const results = document.getElementById("results");
+    const resultList = document.getElementById("result-list");
+    const formMessage = document.getElementById("form-message");
+    const orderedLevels = ["Beginner", "Intermediate", "Advanced"];
+    const orderedWeights = ["Lightweight", "Medium", "Heavy"];
+    const orderedBalances = ["Head-light", "Even balance", "Head-heavy"];
+    const orderedFlex = ["Flexible", "Medium", "Stiff"];
+    const orderedSpeeds = ["Slow", "Medium", "Fast"];
+    const orderedExperience = ["Less than 1 year", "1–3 years", "3–5 years", "5+ years"];
+
+    function adjacentMatch(selected, candidate, order) {
+      const distance = Math.abs(order.indexOf(selected) - order.indexOf(candidate));
+      return distance === 0 ? 1 : distance === 1 ? 0.5 : 0;
+    }
+
+    function bestArrayMatch(selected, candidates, order) {
+      return Math.max(...candidates.map(candidate => adjacentMatch(selected, candidate, order)));
+    }
+
+    function getBudgetMatch(budget, price) {
+      const limits = { "Under $75": 75, "$75–$125": 125, "$125–$175": 175 };
+      if (budget === "$175+") return price >= 175 ? 1 : 0.6;
+      const limit = limits[budget];
+      if (price <= limit) return 1;
+      return price <= limit * 1.2 ? 0.5 : 0;
+    }
+
+    function getPriorityMatch(priority, racket) {
+      if (priority === "Speed and maneuverability") return racket.speed / 10;
+      if (priority === "Power") return racket.power / 10;
+      if (priority === "Control") return racket.control / 10;
+      const ratings = [racket.power, racket.speed, racket.control];
+      const average = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+      const spread = Math.max(...ratings) - Math.min(...ratings);
+      return average / 10 * 0.6 + (1 - spread / 10) * 0.4;
+    }
+
+    function getStyleMatch(style, racket) {
+      if (racket.styles.includes(style)) return 1;
+      const relatedRating = style === "Speed / defensive" ? racket.speed : style === "Power / attacking" ? racket.power : Math.min(racket.power, racket.speed, racket.control);
+      return relatedRating >= 8 ? 0.65 : relatedRating >= 6 ? 0.35 : 0.1;
+    }
+
+    function scoreRacket(answers, racket) {
+      const factors = {
+        style: getStyleMatch(answers.style, racket),
+        skill: bestArrayMatch(answers.skill, racket.skills, orderedLevels),
+        weight: answers.weight === "No preference" ? 1 : adjacentMatch(answers.weight, racket.weightClass, orderedWeights),
+        balance: answers.balance === "No preference" ? 1 : adjacentMatch(answers.balance, racket.balance, orderedBalances),
+        flexibility: answers.flexibility === "No preference" ? 1 : adjacentMatch(answers.flexibility, racket.flexibility, orderedFlex),
+        playingType: answers.playingType === "Both" || racket.playingTypes.includes(answers.playingType) ? 1 : 0.5,
+        swingSpeed: bestArrayMatch(answers.swingSpeed, racket.swingSpeeds, orderedSpeeds),
+        budget: getBudgetMatch(answers.budget, racket.price),
+        priority: getPriorityMatch(answers.priority, racket),
+        brand: answers.brand === "No preference" || answers.brand === "Other" ? 1 : answers.brand === racket.brand ? 1 : 0,
+        experience: bestArrayMatch(answers.experience, racket.experience, orderedExperience)
+      };
+      const score = Object.entries(weights).reduce((total, [key, weight]) => total + factors[key] * weight, 0);
+      return { racket, factors, score: Math.round(score) };
+    }
+
+    function getReasons(answers, match) {
+      const { racket, factors } = match;
+      const reasons = [
+        { key: "style", text: `Playing style: ${answers.style}` },
+        { key: "skill", text: `Skill level: ${answers.skill}` },
+        { key: "weight", text: `Weight preference: ${answers.weight}` },
+        { key: "balance", text: `Balance preference: ${answers.balance}` },
+        { key: "flexibility", text: `Flexibility preference: ${answers.flexibility}` },
+        { key: "playingType", text: `Playing type: ${answers.playingType}` },
+        { key: "swingSpeed", text: `Swing speed: ${answers.swingSpeed}` },
+        { key: "budget", text: `Budget: ${answers.budget}` },
+        { key: "brand", text: `Brand preference: ${answers.brand}` },
+        { key: "experience", text: `Experience: ${answers.experience}` }
+      ];
+      if (answers.priority === "Speed and maneuverability") reasons.push({ key: "priority", text: `Speed rating ${racket.speed}/10 matches your priority` });
+      else if (answers.priority === "Power") reasons.push({ key: "priority", text: `Power rating ${racket.power}/10 matches your priority` });
+      else if (answers.priority === "Control") reasons.push({ key: "priority", text: `Control rating ${racket.control}/10 matches your priority` });
+      else reasons.push({ key: "priority", text: `Power ${racket.power}/10, speed ${racket.speed}/10, and control ${racket.control}/10 provide an even profile` });
+
+      return reasons
+        .filter(reason => factors[reason.key] >= 0.65)
+        .sort((left, right) => weights[right.key] * factors[right.key] - weights[left.key] * factors[left.key])
+        .slice(0, 3)
+        .map(reason => reason.text);
+    }
+
+    function renderResults(answers) {
+      const ranked = rackets.map(racket => scoreRacket(answers, racket)).sort((left, right) => right.score - left.score).slice(0, 3);
+      resultList.replaceChildren();
+
+      ranked.forEach(match => {
+        const { racket } = match;
+        const article = document.createElement("article");
+        article.className = "result";
+
+        const heading = document.createElement("div");
+        heading.className = "result-heading";
+        const title = document.createElement("h3");
+        title.textContent = `${racket.brand} ${racket.name} - $${racket.price}`;
+        const score = document.createElement("span");
+        score.className = "score";
+        score.textContent = `${match.score}% match`;
+        heading.append(title, score);
+
+        const specs = document.createElement("p");
+        specs.className = "specs";
+        specs.textContent = `${racket.weight} | ${racket.balance} | ${racket.flexibility} flex | Power ${racket.power}/10 | Speed ${racket.speed}/10 | Control ${racket.control}/10`;
+
+        const explanation = document.createElement("p");
+        explanation.textContent = "Why it matches:";
+        const reasonList = document.createElement("ul");
+        reasonList.className = "reasons";
+        const reasons = getReasons(answers, match);
+        (reasons.length ? reasons : ["This is the closest available match across your selected preferences."]).forEach(reason => {
+          const item = document.createElement("li");
+          item.textContent = reason;
+          reasonList.append(item);
+        });
+
+        const buyLink = document.createElement("a");
+        buyLink.className = "buy-link";
+        buyLink.href = racket.purchaseUrl;
+        buyLink.target = "_blank";
+        buyLink.rel = "noopener noreferrer";
+        buyLink.textContent = "Buy Racket";
+
+        article.append(heading, specs, explanation, reasonList, buyLink);
+        resultList.append(article);
+      });
+      results.hidden = false;
+      results.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      formMessage.textContent = "";
+      if (!form.reportValidity()) {
+        formMessage.textContent = "Please answer every question before finding your racket.";
+        return;
+      }
+      const answers = Object.fromEntries(new FormData(form).entries());
+      renderResults(answers);
+    });
+
+    form.addEventListener("reset", () => {
+      formMessage.textContent = "";
+      results.hidden = true;
+      resultList.replaceChildren();
+    });
+  </script>
+</body>
+</html>
