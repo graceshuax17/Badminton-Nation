@@ -7,8 +7,14 @@
         {
             "type": "chrome",
             "request": "launch",
+<<<<<<< HEAD
             "name": "Open index.html",
             "file": "/Users/alinazhaman/Desktop/Badminton-Nation/index.html"
+=======
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+>>>>>>> 4e98b186dacf69751981b2fb91544ae6e1cc6968
         }
     ]
 }
