@@ -20,7 +20,7 @@ The questionnaire collects 12 answers and scores every racket in the JavaScript 
 
 Exact matches receive full points, compatible/nearby matches receive partial points, and poor matches receive zero. Priority uses each racket's power, speed, and control ratings. A matching brand preference contributes an additional 5-point preference bonus. The top three final percentages are displayed with explanations.
 
-Purchase links in the prototype currently point to brand/category pages and are marked in `index.html` as URLs to replace with verified product or retailer links before publishing.
+Purchase links in the prototype point to Amazon search results for each racket model, so the recommendations can open directly to a retailer page when the user clicks a buy button.
 
 ## Add a racket
 
