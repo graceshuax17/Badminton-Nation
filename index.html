@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Badminton Racket Recommendation</title>
+  <style>
+    :root {
+      font-family: Arial, sans-serif;
+      color: #17212b;
+      background: #f3f6f8;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { background: #123b55; color: white; padding: 2rem 1rem; }
+    header div, main { max-width: 1050px; margin: 0 auto; }
+    h1, h2, h3 { margin-top: 0; }
+    header p { margin-bottom: 0; }
+    main { padding: 1.5rem 1rem 3rem; }
+    form, .result, .notice { background: white; border: 1px solid #d6e0e6; border-radius: 8px; padding: 1.25rem; }
+    fieldset { border: 0; border-bottom: 1px solid #e2e8ec; padding: 0 0 1.25rem; margin: 0 0 1.25rem; }
+    fieldset:last-of-type { border-bottom: 0; }
+    legend { font-size: 1.05rem; font-weight: bold; margin-bottom: .75rem; }
+    .options { display: grid; gap: .55rem; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+    label { display: flex; gap: .5rem; align-items: center; cursor: pointer; }
+    input[type="radio"] { accent-color: #16704a; }
+    button { border: 0; border-radius: 5px; padding: .7rem 1rem; font-weight: bold; cursor: pointer; }
+    button.primary { background: #16704a; color: white; }
+    button.secondary { background: #e6edf1; color: #17212b; }
+    button:hover { filter: brightness(.95); }
+    .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+    .error { color: #a02222; margin: 0 0 1rem; font-weight: bold; }
+    .results { margin-top: 1.5rem; }
+    .result-list { display: grid; gap: 1rem; }
+    .result { position: relative; }
+    .score { color: #16704a; font-size: 1.3rem; font-weight: bold; }
+    .specs { display: flex; flex-wrap: wrap; gap: .45rem; padding: 0; list-style: none; }
+    .specs li { background: #edf4f1; border-radius: 4px; padding: .35rem .55rem; font-size: .9rem; }
+    .reason { color: #3c4d57; }
+    .buy-link { display: inline-block; margin-top: .75rem; text-decoration: none; }
+    .muted { color: #586a74; font-size: .9rem; }
+    .hidden { display: none; }
+    @media (min-width: 720px) {
+      .result-list { grid-template-columns: repeat(3, 1fr); }
+      .result { display: flex; flex-direction: column; }
+      .result .buy-link { margin-top: auto; align-self: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>AI Badminton Racket Finder</h1>
+      <p>Answer a few questions to find rackets that fit your game.</p>
+    </div>
+  </header>
+
+  <main>
+    <form id="questionnaire" novalidate>
+      <div id="form-error" class="error" role="alert" aria-live="polite"></div>
+
+      <fieldset>
+        <legend>1. Gender</legend>
+        <div class="options">
+          <label><input type="radio" name="gender" value="male" required> Male</label>
+          <label><input type="radio" name="gender" value="female"> Female</label>
+          <label><input type="radio" name="gender" value="prefer-not" > Prefer not to say</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Skill Level</legend>
+        <div class="options">
+          <label><input type="radio" name="skill" value="beginner" required> Beginner</label>
+          <label><input type="radio" name="skill" value="intermediate"> Intermediate</label>
+          <label><input type="radio" name="skill" value="advanced"> Advanced</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Playing Type</legend>
+        <div class="options">
+          <label><input type="radio" name="playingType" value="singles" required> Singles</label>
+          <label><input type="radio" name="playingType" value="doubles"> Doubles</label>
+          <label><input type="radio" name="playingType" value="both"> Both</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>4. Playing Style</legend>
+        <div class="options">
+          <label><input type="radio" name="style" value="speed" required> Speed / defensive</label>
+          <label><input type="radio" name="style" value="balanced"> Balanced</label>
+          <label><input type="radio" name="style" value="power"> Power / attacking</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>5. Approximate Playing Experience</legend>
+        <div class="options">
+          <label><input type="radio" name="experience" value="under1" required> Less than 1 year</label>
+          <label><input type="radio" name="experience" value="1-3"> 1–3 years</label>
+          <label><input type="radio" name="experience" value="3-5"> 3–5 years</label>
+          <label><input type="radio" name="experience" value="5plus"> 5+ years</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>6. Swing Speed</legend>
+        <div class="options">
+          <label><input type="radio" name="swingSpeed" value="slow" required> Slow</label>
+          <label><input type="radio" name="swingSpeed" value="medium"> Medium</label>
+          <label><input type="radio" name="swingSpeed" value="fast"> Fast</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>7. Preferred Racket Weight</legend>
+        <div class="options">
+          <label><input type="radio" name="weight" value="lightweight" required> Lightweight</label>
+          <label><input type="radio" name="weight" value="medium"> Medium</label>
+          <label><input type="radio" name="weight" value="heavy"> Heavy</label>
+          <label><input type="radio" name="weight" value="any"> No preference</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>8. Preferred Balance</legend>
+        <div class="options">
+          <label><input type="radio" name="balance" value="head-light" required> Head-light</label>
+          <label><input type="radio" name="balance" value="even"> Even balance</label>
+          <label><input type="radio" name="balance" value="head-heavy"> Head-heavy</label>
+          <label><input type="radio" name="balance" value="any"> No preference</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>9. Racket Flexibility</legend>
+        <div class="options">
+          <label><input type="radio" name="flexibility" value="flexible" required> Flexible</label>
+          <label><input type="radio" name="flexibility" value="medium"> Medium</label>
+          <label><input type="radio" name="flexibility" value="stiff"> Stiff</label>
+          <label><input type="radio" name="flexibility" value="any"> No preference</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>10. Budget</legend>
+        <div class="options">
+          <label><input type="radio" name="budget" value="under75" required> Under $75</label>
+          <label><input type="radio" name="budget" value="75-125"> $75–$125</label>
+          <label><input type="radio" name="budget" value="125-175"> $125–$175</label>
+          <label><input type="radio" name="budget" value="175plus"> $175+</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>11. What is most important to you?</legend>
+        <div class="options">
+          <label><input type="radio" name="priority" value="speed" required> Speed and maneuverability</label>
+          <label><input type="radio" name="priority" value="power"> Power</label>
+          <label><input type="radio" name="priority" value="control"> Control</label>
+          <label><input type="radio" name="priority" value="balanced"> Balanced performance</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>12. Any brand preference?</legend>
+        <div class="options">
+          <label><input type="radio" name="brand" value="any" required> No preference</label>
+          <label><input type="radio" name="brand" value="Yonex"> Yonex</label>
+          <label><input type="radio" name="brand" value="Victor"> Victor</label>
+          <label><input type="radio" name="brand" value="Li-Ning"> Li-Ning</label>
+          <label><input type="radio" name="brand" value="Other"> Other</label>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button class="primary" type="submit">Find My Racket</button>
+        <button class="secondary" type="reset" id="reset-button">Start Over</button>
+      </div>
+    </form>
+
+    <section id="results" class="results hidden" aria-live="polite">
+      <h2>Your top recommendations</h2>
+      <p class="muted">Scores compare every racket against all of your answers. Purchase links are example brand/category links and should be replaced with verified retailer URLs before publishing.</p>
+      <div id="result-list" class="result-list"></div>
+    </section>
+  </main>
+
+  <script>
+    // Replace purchaseUrl values with verified retailer or manufacturer product pages before publishing.
+    const racketDatabase = [
+      { name: 'Astrox 88D Pro', brand: 'Yonex', price: 269, weight: 'heavy', balance: 'head-heavy', flexibility: 'stiff', skill: ['advanced'], playingType: ['singles', 'doubles'], style: ['power'], swingSpeed: ['fast'], power: 10, speed: 6, control: 8, purchaseUrl: 'https://www.yonex.com/badminton/racquets' },
+      { name: 'Nanoflare 800', brand: 'Yonex', price: 229, weight: 'lightweight', balance: 'head-light', flexibility: 'stiff', skill: ['intermediate', 'advanced'], playingType: ['doubles', 'both'], style: ['speed'], swingSpeed: ['fast', 'medium'], power: 7, speed: 10, control: 8, purchaseUrl: 'https://www.yonex.com/badminton/racquets' },
+      { name: 'Arcsaber 11 Pro', brand: 'Yonex', price: 249, weight: 'medium', balance: 'even', flexibility: 'medium', skill: ['intermediate', 'advanced'], playingType: ['singles', 'doubles', 'both'], style: ['balanced'], swingSpeed: ['medium', 'fast'], power: 8, speed: 8, control: 10, purchaseUrl: 'https://www.yonex.com/badminton/racquets' },
+      { name: 'Astrox 7 DG', brand: 'Yonex', price: 119, weight: 'medium', balance: 'head-heavy', flexibility: 'medium', skill: ['beginner', 'intermediate'], playingType: ['singles', 'both'], style: ['power', 'balanced'], swingSpeed: ['medium'], power: 8, speed: 6, control: 7, purchaseUrl: 'https://www.yonex.com/badminton/racquets' },
+      { name: 'Thruster K Falcon Claw', brand: 'Victor', price: 199, weight: 'medium', balance: 'head-heavy', flexibility: 'stiff', skill: ['intermediate', 'advanced'], playingType: ['singles', 'both'], style: ['power'], swingSpeed: ['fast'], power: 10, speed: 6, control: 8, purchaseUrl: 'https://www.victorsport.com/product/racket' },
+      { name: 'Auraspeed 90K', brand: 'Victor', price: 229, weight: 'medium', balance: 'even', flexibility: 'stiff', skill: ['intermediate', 'advanced'], playingType: ['doubles', 'both'], style: ['balanced', 'speed'], swingSpeed: ['fast', 'medium'], power: 8, speed: 9, control: 9, purchaseUrl: 'https://www.victorsport.com/product/racket' },
+      { name: 'DriveX 9X', brand: 'Victor', price: 159, weight: 'medium', balance: 'even', flexibility: 'medium', skill: ['beginner', 'intermediate'], playingType: ['doubles', 'both'], style: ['balanced'], swingSpeed: ['medium'], power: 7, speed: 8, control: 8, purchaseUrl: 'https://www.victorsport.com/product/racket' },
+      { name: 'Axforce 90 Tiger', brand: 'Li-Ning', price: 299, weight: 'heavy', balance: 'head-heavy', flexibility: 'stiff', skill: ['advanced'], playingType: ['singles', 'both'], style: ['power'], swingSpeed: ['fast'], power: 10, speed: 6, control: 9, purchaseUrl: 'https://www.li-ning.com/badminton/rackets' },
+      { name: 'Aeronaut 9000C', brand: 'Li-Ning', price: 219, weight: 'medium', balance: 'head-heavy', flexibility: 'medium', skill: ['intermediate', 'advanced'], playingType: ['singles', 'both'], style: ['power', 'balanced'], swingSpeed: ['medium', 'fast'], power: 9, speed: 7, control: 8, purchaseUrl: 'https://www.li-ning.com/badminton/rackets' },
+      { name: 'Windstorm 72', brand: 'Li-Ning', price: 109, weight: 'lightweight', balance: 'head-light', flexibility: 'flexible', skill: ['beginner', 'intermediate'], playingType: ['doubles', 'both'], style: ['speed'], swingSpeed: ['slow', 'medium'], power: 6, speed: 9, control: 7, purchaseUrl: 'https://www.li-ning.com/badminton/rackets' }
+    ];
+
+    const weights = { lightweight: 0, medium: 1, heavy: 2 };
+    const budgetRanges = { under75: [0, 74], '75-125': [75, 125], '125-175': [126, 175], '175plus': [176, Infinity] };
+    const weightsByCategory = { style: 20, skill: 15, weight: 10, balance: 15, flexibility: 10, playingType: 10, swingSpeed: 10, budget: 5, priority: 5 };
+    const form = document.getElementById('questionnaire');
+    const formError = document.getElementById('form-error');
+    const results = document.getElementById('results');
+    const resultList = document.getElementById('result-list');
+
+    function getAnswers() {
+      const data = new FormData(form);
+      return Object.fromEntries(data.entries());
+    }
+
+    function matchScore(answer, values, partialValues = []) {
+      if (!answer || answer === 'any') return 1;
+      if (values.includes(answer)) return 1;
+      if (partialValues.includes(answer)) return 0.5;
+      return 0;
+    }
+
+    function budgetScore(answer, price) {
+      const range = budgetRanges[answer];
+      if (!range) return 0;
+      if (price >= range[0] && price <= range[1]) return 1;
+      const distance = price < range[0] ? range[0] - price : price - range[1];
+      return distance <= 30 ? 0.5 : 0;
+    }
+
+    function scoreRacket(racket, answers) {
+      const experienceSkill = { under1: 'beginner', '1-3': 'intermediate', '3-5': 'intermediate', '5plus': 'advanced' }[answers.experience];
+      const selectedSkillScore = matchScore(answers.skill, racket.skill, racket.skill.includes('intermediate') ? ['beginner', 'advanced'] : []);
+      const experienceScore = matchScore(experienceSkill, racket.skill, racket.skill.includes('intermediate') ? ['beginner', 'advanced'] : []);
+      const scores = {
+        style: matchScore(answers.style, racket.style, racket.style.includes('balanced') ? ['speed', 'power'] : []),
+        skill: (selectedSkillScore + experienceScore) / 2,
+        weight: answers.weight === 'any' ? 1 : matchScore(answers.weight, [racket.weight], Math.abs(weights[answers.weight] - weights[racket.weight]) === 1 ? [answers.weight] : []),
+        balance: matchScore(answers.balance, [racket.balance]),
+        flexibility: matchScore(answers.flexibility, [racket.flexibility]),
+        playingType: matchScore(answers.playingType, racket.playingType, racket.playingType.includes('both') ? ['singles', 'doubles'] : []),
+        swingSpeed: matchScore(answers.swingSpeed, racket.swingSpeed, racket.swingSpeed.includes('medium') ? ['slow', 'fast'] : []),
+        budget: budgetScore(answers.budget, racket.price),
+        priority: answers.priority === 'speed' ? racket.speed / 10 : answers.priority === 'power' ? racket.power / 10 : answers.priority === 'control' ? racket.control / 10 : (racket.speed + racket.power + racket.control) / 30
+      };
+      const weightedTotal = Object.entries(weightsByCategory).reduce((total, [category, weight]) => total + scores[category] * weight, 0);
+      const brandScore = answers.brand === 'any' || answers.brand === 'Other' || answers.brand === racket.brand ? 1 : 0;
+      const finalScore = (weightedTotal / 100) * 95 + brandScore * 5;
+      return { racket, score: Math.round(finalScore), scores };
+    }
+
+    function makeReason(result, answers) {
+      const { racket, scores } = result;
+      const strengths = Object.entries(scores)
+        .filter(([, value]) => value >= 0.75)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([key]) => ({ style: 'your playing style', skill: 'your skill level', weight: 'your preferred weight', balance: 'your preferred balance', flexibility: 'your flexibility preference', playingType: 'your playing type', swingSpeed: 'your swing speed', budget: 'your budget', priority: 'your priority' }[key]));
+      const detail = strengths.length ? strengths.join(', ') : 'several of your preferences';
+      const brandText = answers.brand !== 'any' && answers.brand !== 'Other' && answers.brand === racket.brand ? ` It also matches your ${racket.brand} brand preference.` : '';
+      return `This ${racket.style.join(' and ')} racket matches ${detail}.${brandText}`;
+    }
+
+    function renderResults(recommendations, answers) {
+      resultList.innerHTML = recommendations.map((result) => {
+        const { racket, score } = result;
+        return `<article class="result">
+          <div class="score">${score}% match</div>
+          <h3>${racket.name}</h3>
+          <p><strong>${racket.brand}</strong> · $${racket.price}</p>
+          <ul class="specs">
+            <li>${racket.weight}</li><li>${racket.balance}</li><li>${racket.flexibility}</li>
+            <li>Power ${racket.power}/10</li><li>Speed ${racket.speed}/10</li><li>Control ${racket.control}/10</li>
+          </ul>
+          <p class="reason">${makeReason(result, answers)}</p>
+          <a class="buy-link" href="${racket.purchaseUrl}" target="_blank" rel="noopener noreferrer"><button class="primary" type="button">Buy Racket</button></a>
+        </article>`;
+      }).join('');
+      results.classList.remove('hidden');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      formError.textContent = '';
+      if (!form.checkValidity()) {
+        formError.textContent = 'Please answer every question before finding your racket.';
+        const firstMissing = form.querySelector('input:invalid');
+        if (firstMissing) firstMissing.focus();
+        return;
+      }
+      const answers = getAnswers();
+      const recommendations = racketDatabase.map((racket) => scoreRacket(racket, answers)).sort((a, b) => b.score - a.score).slice(0, 3);
+      renderResults(recommendations, answers);
+    });
+
+    document.getElementById('reset-button').addEventListener('click', () => {
+      formError.textContent = '';
+      results.classList.add('hidden');
+      resultList.innerHTML = '';
+    });
+  </script>
+</body>
+</html>
